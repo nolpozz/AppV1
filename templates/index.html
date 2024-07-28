@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Learning App</title>
+</head>
+<body>
+    <h1>Language Learning App</h1>
+    <form action="/generate_sentence" method="post">
+        <label for="language">Language:</label>
+        <select name="language">
+            <option value="Spanish">Spanish</option>
+            <option value="Russian">Russian</option>
+            <option value="Mandarin">Mandarin</option>
+        </select>
+        <br>
+        <label for="level">Level:</label>
+        <select name="level">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+        <br>
+        <button type="submit">Generate Sentence</button>
+    </form>
+</body>
+</html>
