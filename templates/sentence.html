@@ -1,19 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generated Sentence</title>
 </head>
 <body>
     <h1 id="sentence">{{ sentence }}</h1>
     <button id="new-sentence-btn">Get New Sentence</button>
-    <form id="translation-form">
-        <input type="hidden" id="correct_sentence" value="{{ sentence }}">
+    
+    <form id="translation-form" method="post" action="/check_translation">
+        <input type="hidden" id="correct_sentence" name="correct_sentence" value="{{ sentence }}">
+        
         <label for="translation">Your Translation:</label>
         <input type="text" id="translation" name="translation">
+        
         <button type="submit">Check Translation</button>
     </form>
+
     <p id="result"></p>
+
     <a href="/">Go Back</a>
+    
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
