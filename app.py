@@ -37,17 +37,19 @@ def generate_api_sentence():
     # Get the uploaded file (if any)
     file = request.files.get('file')
     
-    if not language or not response:
-        return jsonify({"error": "Language and response are required"}), 400
     
     # Optionally, process the file content (if applicable)
     if file and file.filename.endswith('.txt'):
         response = file.read().decode('utf-8')  # Assuming it's a text file
         # Process the file content if needed...
+
+    if not language or not response:
+        return jsonify({"error": "Language and response are required"}), 400
     
     prompt = f"Generate a sentence in {language} using the following vocab: {response}"
     # prompt = "Given the following vocab list in a language, write a single, grammatically correct sentence using only the words in the list plus necessary inflections and other grammatical pieces:\n" + ", ".join(vocab_list)
     
+    #should generate a list of sentences and store them so as to query the api fewer times
     
     response = openai.chat.completions.create(
         messages=[
@@ -66,6 +68,7 @@ def generate_api_sentence():
     #     ]
     # )
     
+
     sentence = response.choices[0].message.content
     return render_template('sentence.html', sentence=sentence)
 
@@ -73,4 +76,4 @@ def generate_api_sentence():
 
 if __name__ == '__main__':
     create_tables()
-    app.run(debug=True)
+    app.run(debug=False)
