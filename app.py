@@ -13,6 +13,8 @@ def home():
 @app.route('/generate_sentence', methods=['POST'])
 def generate_sentence():
     language = request.form['language']
+    if(language == 'Mandarin'):
+        language = 'Mandarin pinyin'
     level = request.form['level']
     sentence = get_sentence(level, language)
     return render_template('sentence.html', sentence=sentence)
