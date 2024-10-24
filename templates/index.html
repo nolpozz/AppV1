@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Language Learning App</h1>
-    <form action="/generate_api_sentence" method="post" enctype="multipart/form-data">
+    <form action="/add_words" method="post" enctype="multipart/form-data">
         <label for="language">Language:</label>
         <select name="language" id="language">
             <option value="Spanish">Spanish</option>
@@ -25,6 +25,18 @@
         <!-- File upload input -->
         <label for="file">Attach a text file:</label>
         <input type="file" id="file" name="file" accept=".txt">
+        <br><br>
+
+        <button type="submit" >Add words to your database</button> 
+        <!-- add an @click for when it's submitted to alert user that submission is complete and processed -->
+    </form>
+    <form action="/generate_sentence" method="post" enctype="multipart/form-data">
+        <label for="language">Language:</label>
+        <select name="language" id="language">
+            <option value="Spanish">Spanish</option>
+            <option value="Russian">Russian</option>
+            <option value="Mandarin pinyin">Mandarin</option>
+        </select>
         <br><br>
 
         <button type="submit">Generate Sentence</button>

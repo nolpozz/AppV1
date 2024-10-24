@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let correctSentenceInput = document.getElementById("correct_sentence");
     let resultElement = document.getElementById("result");
 
-    const apiUrl = '/api/generate_sentence';
-    const checkTranslationUrl = '/api/check_translation';
+    const apiUrl = '/generate_sentence';
+    const checkTranslationUrl = '/check_translation';
 
     let getNewSentence = () => {
         fetch(apiUrl)
