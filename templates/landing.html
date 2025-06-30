@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaLearn - Master Languages with AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-globe"></i>
+                <span>LinguaLearn</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+                <a href="{{ url_for('register') }}" class="btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>Master Languages with AI-Powered Learning</h1>
+                    <p>Personalized vocabulary, intelligent sentence generation, and adaptive practice sessions to accelerate your language learning journey.</p>
+                    <div class="hero-buttons">
+                        <a href="{{ url_for('register') }}" class="btn-primary btn-large">
+                            <i class="fas fa-rocket"></i>
+                            Start Learning Free
+                        </a>
+                        <a href="#features" class="btn-outline btn-large">
+                            <i class="fas fa-play"></i>
+                            See How It Works
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="floating-card">
+                        <div class="card-header">
+                            <div class="language-flags">
+                                <span>🇪🇸</span>
+                                <span>🇫🇷</span>
+                                <span>🇩🇪</span>
+                                <span>🇯🇵</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p class="sentence">¡Hola! ¿Cómo estás hoy?</p>
+                            <p class="translation">Hello! How are you today?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Why Choose LinguaLearn?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>AI-Powered Learning</h3>
+                        <p>Advanced AI generates personalized sentences and adapts to your learning pace.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Personalized Experience</h3>
+                        <p>Your own vocabulary bank and learning progress tracked across multiple languages.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your mastery levels, review counts, and learning statistics in real-time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h3>Multiple Languages</h3>
+                        <p>Support for 15+ languages including Spanish, French, German, Japanese, and more.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3>Interactive Practice</h3>
+                        <p>Engage in vocabulary drills and sentence translation exercises with instant feedback.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Responsive Design</h3>
+                        <p>Learn on any device with our beautiful, mobile-friendly interface.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to Start Your Language Journey?</h2>
+                <p>Join thousands of learners who are already mastering new languages with LinguaLearn.</p>
+                <a href="{{ url_for('register') }}" class="btn-primary btn-large">
+                    <i class="fas fa-user-plus"></i>
+                    Create Free Account
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>LinguaLearn</h4>
+                    <p>Empowering language learners with AI-driven tools and personalized experiences.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Languages</h4>
+                    <ul>
+                        <li>Spanish 🇪🇸</li>
+                        <li>French 🇫🇷</li>
+                        <li>German 🇩🇪</li>
+                        <li>Japanese 🇯🇵</li>
+                        <li>And 11 more...</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 LinguaLearn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+</body>
+</html> 

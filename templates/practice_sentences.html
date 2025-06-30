@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Practice - {{ language.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Sentence Practice</h1>
+            <div class="language-info">
+                <span class="flag">{{ language.flag_emoji }}</span>
+                <span class="language-name">{{ language.name }}</span>
+            </div>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </header>
+
+        <div class="practice-container">
+            <div class="practice-stats">
+                <div class="stat">
+                    <span class="stat-label">Question</span>
+                    <span class="stat-value" id="question-number">1</span>
+                    <span class="stat-total">/ <span id="total-questions">5</span></span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="score">0</span>
+                    <span class="stat-total">/ <span id="total-answered">0</span></span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value" id="timer">00:00</span>
+                </div>
+            </div>
+
+            <div class="question-container" id="question-container">
+                <div class="question-card">
+                    <h2 class="question-text" id="question-text">Loading...</h2>
+                    <div class="translation-input">
+                        <label for="translation-answer">Translate this sentence to English:</label>
+                        <textarea id="translation-answer" placeholder="Enter your translation..." rows="3"></textarea>
+                        <button class="btn btn-primary" id="submit-answer">Submit Answer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feedback-container" id="feedback-container" style="display: none;">
+                <div class="feedback-card">
+                    <div class="feedback-icon" id="feedback-icon">✓</div>
+                    <h3 class="feedback-title" id="feedback-title">Good Translation!</h3>
+                    <div class="feedback-content">
+                        <p class="feedback-message" id="feedback-message">Your translation was close!</p>
+                        <div class="correct-answer">
+                            <strong>Suggested translation:</strong>
+                            <p id="correct-translation"></p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="next-question">Next Question</button>
+                </div>
+            </div>
+
+            <div class="results-container" id="results-container" style="display: none;">
+                <div class="results-card">
+                    <h2>Practice Complete!</h2>
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <span class="result-label">Final Score</span>
+                            <span class="result-value" id="final-score">0/0</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="result-label">Accuracy</span>
+                            <span class="result-value" id="accuracy">0%</span>
+                        </div>
+                        <div class="result-stat">
+                            <span class="result-label">Time Taken</span>
+                            <span class="result-value" id="final-time">00:00</span>
+                        </div>
+                    </div>
+                    <div class="results-actions">
+                        <button class="btn btn-primary" id="practice-again">Practice Again</button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sessionId = {{ session_id }};
+        const languageId = {{ language.id }};
+        const languageName = "{{ language.name }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/practice_sentences.js') }}"></script>
+</body>
+</html> 

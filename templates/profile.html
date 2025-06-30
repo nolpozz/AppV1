@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - LinguaLearn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-globe"></i>
+                <span>LinguaLearn</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('profile') }}" class="active">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <div class="container">
+            <div class="profile-header">
+                <h1>Profile Settings</h1>
+                <p>Manage your account and learning preferences</p>
+            </div>
+
+            <div class="profile-grid">
+                <!-- Account Information -->
+                <section class="profile-section">
+                    <h2><i class="fas fa-user"></i> Account Information</h2>
+                    <div class="profile-card">
+                        <div class="profile-info">
+                            <div class="info-item">
+                                <label>Username:</label>
+                                <span>{{ user.username }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Email:</label>
+                                <span>{{ user.email }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Member Since:</label>
+                                <span>{{ user.created_at.split(' ')[0] if user.created_at else 'N/A' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Last Login:</label>
+                                <span>{{ user.last_login.split(' ')[0] if user.last_login else 'Never' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Learning Statistics -->
+                <section class="profile-section">
+                    <h2><i class="fas fa-chart-bar"></i> Learning Statistics</h2>
+                    <div class="stats-card">
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ stats.vocabulary.total }}</div>
+                                <div class="stat-label">Total Words</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ stats.vocabulary.mastered }}</div>
+                                <div class="stat-label">Mastered</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ "%.1f"|format(stats.vocabulary.avg_mastery) }}</div>
+                                <div class="stat-label">Avg Mastery</div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <div class="stat-number">{{ stats.sessions.total }}</div>
+                                <div class="stat-label">Sessions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ "%.1f"|format(stats.sessions.avg_accuracy) }}%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">{{ stats.sessions.total_questions }}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Languages Management -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-globe"></i> Your Languages</h2>
+                        <button class="btn-secondary" onclick="showAddLanguageModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Language
+                        </button>
+                    </div>
+                    
+                    {% if user_languages %}
+                    <div class="languages-list">
+                        {% for language in user_languages %}
+                        <div class="language-item">
+                            <div class="language-info">
+                                <span class="language-flag">{{ language.flag_emoji }}</span>
+                                <div class="language-details">
+                                    <h3>{{ language.name }}</h3>
+                                    <span class="proficiency-badge">{{ language.proficiency_level }}</span>
+                                </div>
+                            </div>
+                            <div class="language-actions">
+                                <button class="btn-secondary btn-small" onclick="changeProficiency({{ language.id }})">
+                                    <i class="fas fa-edit"></i>
+                                    Change Level
+                                </button>
+                                <button class="btn-outline btn-small" onclick="removeLanguage({{ language.id }})">
+                                    <i class="fas fa-trash"></i>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-globe"></i>
+                        <h3>No languages added yet</h3>
+                        <p>Add your first language to start learning!</p>
+                        <button class="btn-primary" onclick="showAddLanguageModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Your First Language
+                        </button>
+                    </div>
+                    {% endif %}
+                </section>
+
+                <!-- Vocabulary Management -->
+                <section class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-book"></i> Vocabulary Management</h2>
+                        <button class="btn-secondary" onclick="showBulkAddModal()">
+                            <i class="fas fa-upload"></i>
+                            Bulk Add
+                        </button>
+                    </div>
+                    
+                    <div class="vocabulary-controls">
+                        <div class="filter-group">
+                            <label for="vocabLanguageFilter">Language:</label>
+                            <select id="vocabLanguageFilter" onchange="filterVocabulary()">
+                                <option value="">All Languages</option>
+                                {% for language in user_languages %}
+                                <option value="{{ language.id }}">{{ language.flag_emoji }} {{ language.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="vocabDifficultyFilter">Difficulty:</label>
+                            <select id="vocabDifficultyFilter" onchange="filterVocabulary()">
+                                <option value="">All Levels</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="vocabularyList" class="vocabulary-list">
+                        <!-- Vocabulary items will be loaded here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Language Modal -->
+    <div id="addLanguageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add a Language</h3>
+                <button class="modal-close" onclick="hideAddLanguageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="languageSelect">Language</label>
+                    <select id="languageSelect" required>
+                        <option value="">Select a language...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="proficiencyLevel">Proficiency Level</label>
+                    <select id="proficiencyLevel" required>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="hideAddLanguageModal()">Cancel</button>
+                <button class="btn-primary" onclick="addLanguage()">Add Language</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Add Vocabulary Modal -->
+    <div id="bulkAddModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Bulk Add Vocabulary</h3>
+                <button class="modal-close" onclick="hideBulkAddModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="bulkLanguageSelect">Language</label>
+                    <select id="bulkLanguageSelect" required>
+                        <option value="">Select a language...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bulkWords">Words (comma-separated)</label>
+                    <textarea id="bulkWords" rows="6" placeholder="Enter words separated by commas..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bulkDifficulty">Difficulty Level</label>
+                    <select id="bulkDifficulty" required>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="hideBulkAddModal()">Cancel</button>
+                <button class="btn-primary" onclick="bulkAddVocabulary()">
+                    <i class="fas fa-upload"></i>
+                    Add Words
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html> 

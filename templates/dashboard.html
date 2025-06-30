@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LinguaLearn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-globe"></i>
+                <span>LinguaLearn</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Welcome back, {{ current_user.username }}!</h1>
+                <p>Ready to continue your language learning journey?</p>
+            </div>
+
+            <!-- Stats Overview -->
+            <section class="stats-section">
+                <h2>Your Progress</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ stats.vocabulary.total }}</h3>
+                            <p>Total Words</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ stats.vocabulary.mastered }}</h3>
+                            <p>Mastered Words</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ "%.1f"|format(stats.vocabulary.avg_mastery) }}</h3>
+                            <p>Avg Mastery</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ "%.1f"|format(stats.sessions.avg_accuracy) }}%</h3>
+                            <p>Accuracy</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Languages Section -->
+            <section class="languages-section">
+                <div class="section-header">
+                    <h2>Your Languages</h2>
+                    <button class="btn-secondary" onclick="showAddLanguageModal()">
+                        <i class="fas fa-plus"></i>
+                        Add Language
+                    </button>
+                </div>
+                
+                {% if languages %}
+                <div class="languages-grid">
+                    {% for language in languages %}
+                    <div class="language-card">
+                        <div class="language-header">
+                            <span class="language-flag">{{ language.flag_emoji }}</span>
+                            <h3>{{ language.name }}</h3>
+                        </div>
+                        <div class="language-actions">
+                            <button class="btn-primary" onclick="startPractice({{ language.language_id }}, 'vocabulary')">
+                                <i class="fas fa-book"></i>
+                                Vocabulary
+                            </button>
+                            <button class="btn-secondary" onclick="startPractice({{ language.language_id }}, 'sentences')">
+                                <i class="fas fa-comments"></i>
+                                Sentences
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-globe"></i>
+                    <h3>No languages added yet</h3>
+                    <p>Add your first language to start learning!</p>
+                    <button class="btn-primary" onclick="showAddLanguageModal()">
+                        <i class="fas fa-plus"></i>
+                        Add Your First Language
+                    </button>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <div class="action-card" onclick="showAddVocabularyModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Add Vocabulary</h3>
+                        <p>Add new words to your learning bank</p>
+                    </div>
+                    <div class="action-card" onclick="window.location.href='{{ url_for('profile') }}'">
+                        <i class="fas fa-user-cog"></i>
+                        <h3>Profile Settings</h3>
+                        <p>Manage your account and preferences</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Language Modal -->
+    <div id="addLanguageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add a Language</h3>
+                <button class="modal-close" onclick="hideAddLanguageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="languageSelect">Language</label>
+                    <select id="languageSelect" required>
+                        <option value="">Select a language...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="hideAddLanguageModal()">Cancel</button>
+                <button class="btn-primary" onclick="addLanguage()">Add Language</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Vocabulary Modal -->
+    <div id="addVocabularyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Vocabulary</h3>
+                <button class="modal-close" onclick="hideAddVocabularyModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="vocabLanguageSelect">Language</label>
+                    <select id="vocabLanguageSelect" required>
+                        <option value="">Select a language...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vocabWord">Word</label>
+                    <input type="text" id="vocabWord" placeholder="Enter the word" required>
+                </div>
+                <div class="form-group">
+                    <label for="vocabTranslation">Translation (optional)</label>
+                    <input type="text" id="vocabTranslation" placeholder="Enter the translation">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="hideAddVocabularyModal()">Cancel</button>
+                <button class="btn-primary" onclick="addVocabulary()">Add Word</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html> 
